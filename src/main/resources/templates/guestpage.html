@@ -15,7 +15,7 @@
 <div class="container">
     <div class="row m-4">
         <div class="col text-center border border-dark">
-            <h1>Placeholder Name's Blog</h1>
+            <h1> <a href="/" class="text-dark">Placeholder Name's Blog</a></h1>
         </div>
         <div class="row m-4">
             <div class="col border border-dark">
@@ -24,7 +24,7 @@
         </div>
     </div>
     <div class="row m-4">
-        <div class="col border border-dark">
+        <div class="col">
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -32,8 +32,13 @@
                 </thead>
                 <tbody>
                 <tr th:each="blogpost: ${blogposts}">
-                    <td th:field="${blogpost.post}">Sighting ID</td>
-                    <td><iframe th:src="@{https://maps.google.com/maps?q={latitude}, {longitude}&z=15&output=embed(latitude=${sighting.latitude},longitude=${sighting.longitude})}" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe></td>
+                    <div style="padding: 15px;">
+                        <div class="border border-dark">
+                            <p th:text="'Posted on: ' + ${blogpost.postTime}"></p>
+                        <div class="border border-dark" th:utext="${blogpost.post}">
+                        </div>
+                        </div>
+                    </div>
                 </tr>
                 </tbody>
             </table>

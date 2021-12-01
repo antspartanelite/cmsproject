@@ -26,19 +26,36 @@
         <div class="col text-center border border-dark">
             <h1>Hero Sighting Manager</h1>
         </div>
-        <div class="row m-4">
-            <form id="addEditForm" th:action="@{createPost}" method="POST">
-                <div class="row">
-                    <div class="col-md-9">
-                        <textarea th:field="${blogpost.post}" id="post" style="width:200%; height:300px"></textarea>
+    </div>
+    <form id="addEditForm" th:action="@{createPost}" method="POST">
+        <div class="row">
+            <div class="col-md-9">
+                <textarea th:field="${blogpost.post}" id="post" style="width:100%; height:300px"></textarea>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <button type="submit" class="btn btn-primary">Post</button>
+        </div>
+    </form>
+    <div class="row m-4">
+        <div class="col">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="bpost: ${blogposts}">
+                    <div style="padding: 15px;">
+                        <div class="border border-dark">
+                            <p th:text="'Posted on: ' + ${bpost.postTime}"></p>
+                            <div class="border border-dark" th:utext="${bpost.post}">
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-9">
-                        <button type="submit" class="btn btn-primary">Post</button>
-                    </div>
-                </div>
-            </form>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
