@@ -25,8 +25,40 @@ public class PostDaoDB implements PostDao{
 
     @Override
     public List<Blogpost> getPosts() {
-        List<Blogpost> heroes = jdbc.query("SELECT * FROM Post ORDER BY PostTime DESC", new BlogPostMapper());
-        return heroes;
+        List<Blogpost> posts = jdbc.query("SELECT * FROM Post ORDER BY PostTime DESC", new BlogPostMapper());
+        return posts;
+    }
+
+
+    @Override
+    public void setPostApproved(int postId) {
+        jdbc.update("UPDATE Post SET Approved = true WHERE PostID = ?", postId);
+    }
+
+    @Override
+    public List<Blogpost> getPostsWithTag(String tag) {
+        List<Blogpost> posts = jdbc.query("SELECT * FROM PostTag INNER JOIN Post ON Post.PostID = PostTag.PostID" +
+                " WHERE Tag = ? ORDER BY PostTime DESC", new BlogPostMapper(), tag);
+        return posts;
+    }
+
+    @Override
+    public List<Blogpost> getApprovedPostsWithTag(String tag) {
+        List<Blogpost> posts = jdbc.query("SELECT * FROM PostTag INNER JOIN Post ON Post.PostID = PostTag.PostID" +
+                " WHERE Tag = ? AND Approved IS true ORDER BY PostTime DESC", new BlogPostMapper(), tag);
+        return posts;
+    }
+
+    @Override
+    public void setPostTags(int id, String[] tags) {
+        for(String tag: tags){
+            jdbc.update("INSERT INTO PostTag(PostID, Tag) VALUES(?, ?)", id, tag);
+        }
+    }
+
+    @Override
+    public List<String> getTags() {
+        return jdbc.query("SELECT Tag FROM PostTag" + "GROUP BY Tag", new TagMapper());
     }
 
     //Maps Hero entries in the database to an object
@@ -35,10 +67,20 @@ public class PostDaoDB implements PostDao{
         @Override
         public Blogpost mapRow(ResultSet rs, int index) throws SQLException {
             Blogpost blogpost = new Blogpost();
+            blogpost.setPostId(rs.getInt("postID"));
             blogpost.setPost(rs.getString("Content"));
             blogpost.setApproved(rs.getBoolean("Approved"));
             blogpost.setPostTime(rs.getString("PostTime"));
             return blogpost;
+        }
+    }
+
+    //Maps Hero entries in the database to an object
+    public static final class TagMapper implements RowMapper<String> {
+
+        @Override
+        public String mapRow(ResultSet rs, int index) throws SQLException {
+            return rs.getString("Tag");
         }
     }
 }

@@ -27,10 +27,12 @@
             <h1> <a href="/" class="text-dark">Placeholder Name's Blog</a></h1>
         </div>
     </div>
-    <form id="addEditForm" th:action="@{createPost}" method="POST">
+    <form id="addEditForm" th:action="@{createOwnerPost}" method="POST">
         <div class="row">
             <div class="col-md-9">
                 <textarea th:field="${blogpost.post}" id="post" style="width:100%; height:300px"></textarea>
+                <input type="text" name="tags" id="tags"
+                       class="form-control" placeholder="Tags go here, delimited by #'s"/>
             </div>
         </div>
         <div class="col-md-9">
@@ -48,10 +50,16 @@
                 <tr th:each="bpost: ${blogposts}">
                     <div style="padding: 15px;">
                         <div class="border border-dark">
-                            <p th:text="'Posted on: ' + ${bpost.postTime}+'approved='+${bpost.approved}"></p>
+                            <p th:text="'Posted on: ' + ${bpost.postTime}"></p>
                             <div class="border border-dark" th:utext="${bpost.post}">
                             </div>
                         </div>
+                        <form action="setApproved" method="POST">
+                            <span th:switch="${bpost.approved}">
+                                <input type="hidden" name="postId" th:value="${bpost.postId}" />
+                                <button th:case="false" type="submit" class="btn btn-primary">Approve</button>
+                            </span>
+                        </form>
                     </div>
                 </tr>
                 </tbody>
