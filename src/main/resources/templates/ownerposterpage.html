@@ -16,7 +16,7 @@
             toolbar_mode: 'floating',
       });
     </script>
-    <title>Hero Sighting Manager</title>
+    <title>Placeholder Name's Blog</title>
 </head>
 <body>
 <!-- Main Body of Page -->
@@ -39,6 +39,12 @@
             <button type="submit" class="btn btn-primary">Post</button>
         </div>
     </form>
+
+    <select onchange="location = this.value">
+        <option selected="selected" disabled="disabled">Choose Tag To Sort By</option>
+        <option th:each="tag:${tags}" th:text="${tag}" th:value="'ownerposterpage'+${tag}"></option>
+    </select>
+
     <div class="row m-4">
         <div class="col">
             <table class="table table-striped">

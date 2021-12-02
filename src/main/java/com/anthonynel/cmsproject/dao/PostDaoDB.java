@@ -16,25 +16,27 @@ public class PostDaoDB implements PostDao{
     @Autowired
     JdbcTemplate jdbc;
 
-
+    //Adds a new post to the database
     public void addPost(Blogpost blogpost){
         jdbc.update("INSERT INTO Post(Content, Approved, PostTime) VALUES(?, ?, CURRENT_TIMESTAMP)",
                 blogpost.getPost(),
                 blogpost.isApproved());
     }
 
+    //Gets all posts from the database
     @Override
     public List<Blogpost> getPosts() {
         List<Blogpost> posts = jdbc.query("SELECT * FROM Post ORDER BY PostTime DESC", new BlogPostMapper());
         return posts;
     }
 
-
+    //Sets a specific post to approved
     @Override
     public void setPostApproved(int postId) {
         jdbc.update("UPDATE Post SET Approved = true WHERE PostID = ?", postId);
     }
 
+    //Gets all posts with a specific tag
     @Override
     public List<Blogpost> getPostsWithTag(String tag) {
         List<Blogpost> posts = jdbc.query("SELECT * FROM PostTag INNER JOIN Post ON Post.PostID = PostTag.PostID" +
@@ -42,6 +44,7 @@ public class PostDaoDB implements PostDao{
         return posts;
     }
 
+    //Gets all approved posts with a specific tag
     @Override
     public List<Blogpost> getApprovedPostsWithTag(String tag) {
         List<Blogpost> posts = jdbc.query("SELECT * FROM PostTag INNER JOIN Post ON Post.PostID = PostTag.PostID" +
@@ -49,6 +52,7 @@ public class PostDaoDB implements PostDao{
         return posts;
     }
 
+    //Sets the tags for a post
     @Override
     public void setPostTags(int id, String[] tags) {
         for(String tag: tags){
@@ -56,9 +60,10 @@ public class PostDaoDB implements PostDao{
         }
     }
 
+    //Gets all tags in the DB
     @Override
     public List<String> getTags() {
-        return jdbc.query("SELECT Tag FROM PostTag" + "GROUP BY Tag", new TagMapper());
+        return jdbc.query("SELECT Tag FROM PostTag" + " GROUP BY Tag", new TagMapper());
     }
 
     //Maps Hero entries in the database to an object

@@ -16,10 +16,12 @@ public class GuestController {
     @Autowired
     PostDao postDao;
 
+    //Gets the guestpage with posts filtered by a tag
     @GetMapping("guestpage{tag}")
     public String displayBlog(@PathVariable String tag, Model model){
         List<Blogpost> blogposts = postDao.getApprovedPostsWithTag(tag);;
         model.addAttribute("blogposts", blogposts);
+        model.addAttribute("tags",postDao.getTags());
         return "guestpage";
     }
 }
